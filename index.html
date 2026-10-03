@@ -1,0 +1,1217 @@
+
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Trading Day | Auto Trading Journal</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kantumruy Pro', 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(56,189,248,.10), transparent 25%),
+                radial-gradient(circle at 90% 20%, rgba(139,92,246,.12), transparent 25%),
+                #07111f;
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 35px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1350px;
+            margin: auto;
+        }
+
+        /* ================= HEADER ================= */
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            gap: 20px;
+        }
+
+        .title-area h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg,#38bdf8,#818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-area p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .today {
+            padding: 10px 16px;
+            border: 1px solid #334155;
+            background: rgba(15,23,42,.75);
+            border-radius: 12px;
+            color: #cbd5e1;
+            backdrop-filter: blur(12px);
+        }
+
+        /* ================= SUMMARY ================= */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(5,1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            padding: 20px;
+            border-radius: 18px;
+            background: rgba(15,23,42,.80);
+            border: 1px solid #263449;
+            box-shadow: 0 15px 40px rgba(0,0,0,.25);
+            transition: .3s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+            border-color: #475569;
+        }
+
+        .summary-label {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-family: Inter,sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .blue {
+            color:#38bdf8;
+        }
+
+        .profit {
+            color:#4ade80;
+        }
+
+        .loss {
+            color:#f87171;
+        }
+
+        .purple {
+            color:#a78bfa;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-card {
+            background: rgba(15,23,42,.85);
+            border: 1px solid #263449;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.25);
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns:
+                1.1fr
+                1.1fr
+                1fr
+                1fr
+                1fr
+                1fr
+                auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .input-group label {
+            display: block;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            height: 46px;
+            padding: 0 13px;
+            border-radius: 10px;
+            border: 1px solid #334155;
+            outline: none;
+            background: #0b1424;
+            color: #f8fafc;
+            font-family: inherit;
+            transition: .2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56,189,248,.10);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        .add-btn {
+            height: 46px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+            font-family: inherit;
+            font-weight: 700;
+            background: linear-gradient(135deg,#2563eb,#7c3aed);
+            transition: .25s;
+            white-space: nowrap;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37,99,235,.30);
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-card {
+            background: rgba(15,23,42,.85);
+            border: 1px solid #263449;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,.30);
+        }
+
+        .table-header {
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:22px 24px;
+            border-bottom:1px solid #263449;
+        }
+
+        .table-header h2 {
+            font-size:20px;
+        }
+
+        .status {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            color:#94a3b8;
+            font-size:13px;
+        }
+
+        .status-dot {
+            width:9px;
+            height:9px;
+            border-radius:50%;
+            background:#22c55e;
+            box-shadow:0 0 10px #22c55e;
+        }
+
+        .table-wrapper {
+            width:100%;
+            overflow-x:auto;
+        }
+
+        table {
+            width:100%;
+            min-width:1100px;
+            border-collapse:collapse;
+        }
+
+        th {
+            padding:16px 12px;
+            background:#0b1424;
+            color:#94a3b8;
+            font-size:12px;
+            font-weight:600;
+            text-transform:uppercase;
+            border-bottom:1px solid #263449;
+            white-space:nowrap;
+        }
+
+        td {
+            padding:16px 12px;
+            text-align:center;
+            color:#dbeafe;
+            font-size:14px;
+            border-bottom:1px solid #1e293b;
+            white-space:nowrap;
+        }
+
+        tbody tr {
+            transition:.2s;
+        }
+
+        tbody tr:hover {
+            background:rgba(51,65,85,.30);
+        }
+
+        .badge {
+            display:inline-block;
+            padding:6px 11px;
+            border-radius:999px;
+            font-family:Inter,sans-serif;
+            font-size:12px;
+            font-weight:700;
+        }
+
+        .badge-blue {
+            color:#38bdf8;
+            background:rgba(56,189,248,.10);
+            border:1px solid rgba(56,189,248,.25);
+        }
+
+        .badge-win {
+            color:#4ade80;
+            background:rgba(34,197,94,.10);
+            border:1px solid rgba(34,197,94,.25);
+        }
+
+        .badge-loss {
+            color:#f87171;
+            background:rgba(239,68,68,.10);
+            border:1px solid rgba(239,68,68,.25);
+        }
+
+        .pair {
+            font-family:Inter,sans-serif;
+            font-weight:700;
+        }
+
+        .delete-btn {
+            border:1px solid rgba(239,68,68,.25);
+            background:rgba(239,68,68,.10);
+            color:#f87171;
+            padding:7px 10px;
+            border-radius:8px;
+            cursor:pointer;
+            transition:.2s;
+        }
+
+        .delete-btn:hover {
+            background:#ef4444;
+            color:white;
+        }
+
+        .empty {
+            padding:50px 20px;
+            text-align:center;
+            color:#64748b;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            display:flex;
+            justify-content:space-between;
+            margin-top:18px;
+            color:#64748b;
+            font-size:12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:1100px) {
+
+            .summary {
+                grid-template-columns:repeat(3,1fr);
+            }
+
+            .form-grid {
+                grid-template-columns:repeat(3,1fr);
+            }
+
+            .add-btn {
+                width:100%;
+            }
+        }
+
+        @media(max-width:700px) {
+
+            body {
+                padding:20px 12px;
+            }
+
+            .header {
+                flex-direction:column;
+                align-items:flex-start;
+            }
+
+            .today {
+                width:100%;
+            }
+
+            .summary {
+                grid-template-columns:repeat(2,1fr);
+            }
+
+            .form-grid {
+                grid-template-columns:1fr 1fr;
+            }
+
+            .title-area h1 {
+                font-size:26px;
+            }
+        }
+
+        @media(max-width:480px) {
+
+            .summary {
+                grid-template-columns:1fr;
+            }
+
+            .form-grid {
+                grid-template-columns:1fr;
+            }
+
+            .footer {
+                flex-direction:column;
+                gap:8px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="title-area">
+
+            <h1>📊 My Trading Day</h1>
+
+            <p>
+                កំណត់ត្រាការជួញដូរ • Auto Trading Journal
+            </p>
+
+        </div>
+
+        <div class="today" id="currentDate">
+            📅 Loading...
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                💰 Starting Balance
+            </div>
+
+            <div class="summary-value blue" id="startingBalance">
+                $0.00
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                📈 Total Profit
+            </div>
+
+            <div class="summary-value profit" id="totalProfit">
+                +$0.00
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                📉 Total Loss
+            </div>
+
+            <div class="summary-value loss" id="totalLoss">
+                -$0.00
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                🟢 Win Trades
+            </div>
+
+            <div class="summary-value profit" id="winCount">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                🎯 Total Balance
+            </div>
+
+            <div class="summary-value purple" id="totalBalance">
+                $0.00
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD TRADE FORM -->
+
+    <div class="form-card">
+
+        <div class="form-title">
+            ➕ បញ្ចូលការជួញដូរថ្មី
+        </div>
+
+        <div class="form-grid">
+
+            <div class="input-group">
+
+                <label>💰 Deposit / Starting Balance</label>
+
+                <input
+                    type="number"
+                    id="deposit"
+                    placeholder="ឧ. 20"
+                    step="0.01"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>📊 Pair</label>
+
+                <input
+                    type="text"
+                    id="pair"
+                    placeholder="XAU/USD"
+                    value="XAU/USD"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>🛑 Stop Loss ($)</label>
+
+                <input
+                    type="number"
+                    id="sl"
+                    placeholder="ឧ. 10"
+                    step="0.01"
+                    min="0"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>🎯 Take Profit ($)</label>
+
+                <input
+                    type="number"
+                    id="tp"
+                    placeholder="ឧ. 30"
+                    step="0.01"
+                    min="0"
+                >
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>🏆 Result</label>
+
+                <select id="result">
+
+                    <option value="win">
+                        🟢 WIN
+                    </option>
+
+                    <option value="loss">
+                        🔴 LOSS
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label>⏰ Time</label>
+
+                <input
+                    type="time"
+                    id="tradeTime"
+                >
+
+            </div>
+
+
+            <button
+                class="add-btn"
+                onclick="addTrade()"
+            >
+                + Add Trade
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- TRADING HISTORY -->
+
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <h2>
+                📋 Trading History
+            </h2>
+
+            <div class="status">
+
+                <span class="status-dot"></span>
+
+                Auto Calculation
+
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Date</th>
+
+                        <th>Starting</th>
+
+                        <th>Time</th>
+
+                        <th>Pair</th>
+
+                        <th>SL</th>
+
+                        <th>TP</th>
+
+                        <th>Result</th>
+
+                        <th>P/L</th>
+
+                        <th>Balance</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="tradeBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        <span>
+            Trading Journal © 2026
+        </span>
+
+        <span>
+            💡 <strong>Enter your numbers → System calculates automatically</strong>
+        </span>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* ==========================================
+       DATA
+    ========================================== */
+
+    let trades =
+        JSON.parse(localStorage.getItem("tradingJournal")) || [];
+
+
+    /* ==========================================
+       DATE
+    ========================================== */
+
+    function getDate() {
+
+        const date = new Date();
+
+        return date.toISOString().split("T")[0];
+
+    }
+
+
+    function formatMoney(number) {
+
+        return "$" + Number(number).toFixed(2);
+
+    }
+
+
+    /* ==========================================
+       ADD TRADE
+    ========================================== */
+
+    function addTrade() {
+
+        const deposit =
+            parseFloat(document.getElementById("deposit").value);
+
+        const pair =
+            document.getElementById("pair").value.trim();
+
+        const sl =
+            parseFloat(document.getElementById("sl").value) || 0;
+
+        const tp =
+            parseFloat(document.getElementById("tp").value) || 0;
+
+        const result =
+            document.getElementById("result").value;
+
+        const time =
+            document.getElementById("tradeTime").value;
+
+
+        /* VALIDATION */
+
+        if (isNaN(deposit) || deposit <= 0) {
+
+            alert("សូមបញ្ចូល Deposit ឱ្យត្រឹមត្រូវ!");
+
+            return;
+
+        }
+
+
+        if (pair === "") {
+
+            alert("សូមបញ្ចូល Trading Pair!");
+
+            return;
+
+        }
+
+
+        if (sl <= 0 && tp <= 0) {
+
+            alert("សូមបញ្ចូល SL ឬ TP!");
+
+            return;
+
+        }
+
+
+        /* ==========================================
+           CALCULATE PROFIT / LOSS
+        ========================================== */
+
+        let pnl = 0;
+
+        if (result === "win") {
+
+            pnl = tp;
+
+        } else {
+
+            pnl = -sl;
+
+        }
+
+
+        /* ==========================================
+           ADD TRADE
+        ========================================== */
+
+        const trade = {
+
+            id: Date.now(),
+
+            date: getDate(),
+
+            deposit: deposit,
+
+            pair: pair,
+
+            sl: sl,
+
+            tp: tp,
+
+            result: result,
+
+            pnl: pnl,
+
+            time: time || new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit"
+            })
+
+        };
+
+
+        trades.push(trade);
+
+
+        /* SAVE */
+
+        localStorage.setItem(
+            "tradingJournal",
+            JSON.stringify(trades)
+        );
+
+
+        /* RESET */
+
+        document.getElementById("deposit").value = "";
+
+        document.getElementById("sl").value = "";
+
+        document.getElementById("tp").value = "";
+
+        document.getElementById("tradeTime").value = "";
+
+
+        render();
+
+    }
+
+
+    /* ==========================================
+       DELETE
+    ========================================== */
+
+    function deleteTrade(id) {
+
+        if (!confirm("តើអ្នកពិតជាចង់លុប Trade នេះមែនទេ?")) {
+
+            return;
+
+        }
+
+
+        trades =
+            trades.filter(trade => trade.id !== id);
+
+
+        localStorage.setItem(
+            "tradingJournal",
+            JSON.stringify(trades)
+        );
+
+
+        render();
+
+    }
+
+
+    /* ==========================================
+       RENDER TABLE
+    ========================================== */
+
+    function render() {
+
+        const body =
+            document.getElementById("tradeBody");
+
+        body.innerHTML = "";
+
+
+        if (trades.length === 0) {
+
+            body.innerHTML = `
+                <tr>
+                    <td colspan="11">
+
+                        <div class="empty">
+
+                            📭 មិនទាន់មាន Trading Record
+
+                            <br>
+
+                            សូមបញ្ចូល Trade ខាងលើ
+
+                        </div>
+
+                    </td>
+                </tr>
+            `;
+
+            updateSummary();
+
+            return;
+
+        }
+
+
+        let balance = 0;
+
+
+        trades.forEach((trade,index) => {
+
+            /*
+             * Starting balance
+             */
+
+            if (index === 0) {
+
+                balance = trade.deposit;
+
+            }
+
+
+            const startingBalance = balance;
+
+
+            /*
+             * Add P/L
+             */
+
+            balance =
+                startingBalance + trade.pnl;
+
+
+            const pnlClass =
+                trade.pnl >= 0
+                ? "badge-win"
+                : "badge-loss";
+
+
+            const resultText =
+                trade.result === "win"
+                ? "✓ WIN"
+                : "✕ LOSS";
+
+
+            body.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        <span class="badge badge-blue">
+                            ${index + 1}
+                        </span>
+                    </td>
+
+
+                    <td>
+                        ${trade.date}
+                    </td>
+
+
+                    <td>
+                        ${formatMoney(startingBalance)}
+                    </td>
+
+
+                    <td>
+                        ${trade.time}
+                    </td>
+
+
+                    <td class="pair">
+                        ${trade.pair}
+                    </td>
+
+
+                    <td>
+                        <span class="badge badge-loss">
+                            -${formatMoney(trade.sl)}
+                        </span>
+                    </td>
+
+
+                    <td>
+                        <span class="badge badge-win">
+                            +${formatMoney(trade.tp)}
+                        </span>
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge ${pnlClass}">
+                            ${resultText}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="badge ${pnlClass}">
+
+                            ${trade.pnl >= 0 ? "+" : ""}
+                            ${formatMoney(trade.pnl)}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <strong>
+                            ${formatMoney(balance)}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteTrade(${trade.id})"
+                        >
+                            🗑 Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        updateSummary();
+
+    }
+
+
+    /* ==========================================
+       SUMMARY CALCULATION
+    ========================================== */
+
+    function updateSummary() {
+
+        if (trades.length === 0) {
+
+            document.getElementById("startingBalance").innerText =
+                "$0.00";
+
+            document.getElementById("totalProfit").innerText =
+                "+$0.00";
+
+            document.getElementById("totalLoss").innerText =
+                "-$0.00";
+
+            document.getElementById("winCount").innerText =
+                "0";
+
+            document.getElementById("totalBalance").innerText =
+                "$0.00";
+
+            return;
+
+        }
+
+
+        /*
+         * Starting balance
+         */
+
+        const starting =
+            trades[0].deposit;
+
+
+        /*
+         * Total Profit
+         */
+
+        const profit =
+            trades
+                .filter(t => t.pnl > 0)
+                .reduce(
+                    (sum,t) => sum + t.pnl,
+                    0
+                );
+
+
+        /*
+         * Total Loss
+         */
+
+        const loss =
+            trades
+                .filter(t => t.pnl < 0)
+                .reduce(
+                    (sum,t) => sum + Math.abs(t.pnl),
+                    0
+                );
+
+
+        /*
+         * Win
+         */
+
+        const wins =
+            trades.filter(
+                t => t.result === "win"
+            ).length;
+
+
+        /*
+         * Total P/L
+         */
+
+        const totalPnL =
+            trades.reduce(
+                (sum,t) => sum + t.pnl,
+                0
+            );
+
+
+        /*
+         * Final Balance
+         */
+
+        const finalBalance =
+            starting + totalPnL;
+
+
+        document.getElementById("startingBalance").innerText =
+            formatMoney(starting);
+
+
+        document.getElementById("totalProfit").innerText =
+            "+" + formatMoney(profit);
+
+
+        document.getElementById("totalLoss").innerText =
+            "-" + formatMoney(loss);
+
+
+        document.getElementById("winCount").innerText =
+            wins;
+
+
+        document.getElementById("totalBalance").innerText =
+            formatMoney(finalBalance);
+
+    }
+
+
+    /* ==========================================
+       CURRENT DATE
+    ========================================== */
+
+    function showDate() {
+
+        const date =
+            new Date();
+
+        const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        };
+
+
+        document.getElementById("currentDate")
+            .innerText =
+            "📅 " +
+            date.toLocaleDateString(
+                "en-US",
+                options
+            );
+
+    }
+
+
+    /* ==========================================
+       START
+    ========================================== */
+
+    showDate();
+
+    render();
+
+</script>
+
+</body>
+
+</html>
